@@ -16,13 +16,13 @@ headers = ['Home_Team', 'Away_Team', 'Home_Total_Shoots', 'Home_Accurate_Shoots'
 driver.get(links[0].get('href').replace(links[0].get('href').split('/')[5], 'iddaa/' + links[0].get('href').split('/')[5]))
 time.sleep(2)
 soup = BeautifulSoup(driver.page_source, 'html.parser')
-headers_taken = soup.select('.widget-iddaa-markets__link .widget-iddaa-markets__label')[56:83]
-for i in range(0,27):
+headers_taken = soup.select('.widget-iddaa-markets__link .widget-iddaa-markets__label')[56:84]
+for i in range(0,28):
     headers.append(headers_taken[i].getText().strip().replace(':','-'))
 
 df = pd.DataFrame(columns=headers)
 
-for iter in range(1,3):
+for iter in range(1,10):
     for link in links:
         match_link = link.get('href')
         statistic_link = match_link.replace(match_link.split('/')[5], 'istatistik/' + match_link.split('/')[5])
@@ -48,10 +48,10 @@ for iter in range(1,3):
         match_statistics.append(soup.select('.widget-iddaa-markets__link .widget-iddaa-markets__value')[0].getText().strip())
         match_statistics.append(soup.select('.widget-iddaa-markets__link .widget-iddaa-markets__value')[1].getText().strip())
         match_statistics.append(soup.select('.widget-iddaa-markets__link .widget-iddaa-markets__value')[2].getText().strip())
-
-        match_statistics_taken = soup.select('.widget-iddaa-markets__link .widget-iddaa-markets__value')[56:83]
         
-        for i in range(0,27):
+        match_statistics_taken = soup.find('li', {'data-market':'15'}).find_all('span', class_='widget-iddaa-markets__value')
+
+        for i in range(0,28):
             match_statistics.append(match_statistics_taken[i].getText().strip())
 
         data_to_append = {}
